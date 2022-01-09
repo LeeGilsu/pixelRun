@@ -41,6 +41,7 @@ public class SphereRot : MonoBehaviour
     public void LeftRot()
     {
         StartCoroutine(moveRot(0));
+        Debug.Log("left");
     }
 
     public void RightRot()
