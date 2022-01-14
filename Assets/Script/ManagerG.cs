@@ -9,7 +9,7 @@ public class ManagerG : MonoBehaviour
 {
     // Start is called before the first frame update
     public GameObject UI_Panel;
-    public GameObject UI_FinishPanel;
+    public GameObject _clearbox;
     public Player player;
 
     private Scene scene;
@@ -17,20 +17,24 @@ public class ManagerG : MonoBehaviour
     public TMPro.TMP_Text text;
     public TMPro.TMP_Text Ftext; // 종료 후 경과 시간 출력 텍스트.
     public bool m_stop = false;
+
+    private void Awake()
+    {
+     //   _clearbox = GameObject.Find("ClearBox");//.GetComponent<Canvas>();
+    //    _clearbox.SetActive(false);
+    }
     void Start()
     {
         player = GameObject.Find("Player").GetComponent<Player>();
         StartCoroutine(SystemPause());
 
         UI_Panel = GameObject.Find("GameOver");
-        UI_FinishPanel = GameObject.Find("FinishStage");
         UI_Panel.SetActive(false);
-        UI_FinishPanel.SetActive(false);
-        Ftext = UI_FinishPanel.GetComponentInChildren<TMPro.TMP_Text>();
+        Ftext = _clearbox.GetComponentInChildren<TMPro.TMP_Text>(); // GetComponentInChildren은 하위 객채 Text 첫번째 오브젝트를 불러옴.
 
         scene = SceneManager.GetActiveScene();
         text = GetComponentInChildren<TMPro.TMP_Text>();
-   
+
         playtime = 50f;
 
         DeleyTime(); 
@@ -97,18 +101,21 @@ public class ManagerG : MonoBehaviour
 
     public void FinishST()
     {
-        UI_FinishPanel.SetActive(true);
+        _clearbox.SetActive(true); //클리어 오브잭트 활성화.
         m_stop = true; // 업데이트 타이머 정지.
         StartCoroutine(deley(1.5f));
-        DeleyTime(); // 게임 정지.
-        Ftext.text = "Clear Time :"+text.text;
+      
+        Ftext.text = /*"Clear Time :"+*/text.text;
         StopAllCoroutines();
-
-
+        StartCoroutine(deley(2f)); // 딜레이 후 움직임 정지.
+        // 딜레이를 안할 시 clearbox가 올라오기전에 멈춤으로인한 딜레이.
     }
 
     IEnumerator deley(float del)
     {
         yield return new WaitForSeconds(del);
+        DeleyTime(); // 게임 정지.
     }
+    
+    //reantween 이용한 메시지박스 연출
 }
