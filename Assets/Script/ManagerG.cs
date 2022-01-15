@@ -96,6 +96,7 @@ public class ManagerG : MonoBehaviour
         SceneManager.LoadScene(scene.name);
         player.p_Point = 0;
         m_stop = false;
+       
         DeleyTime();
     }
 

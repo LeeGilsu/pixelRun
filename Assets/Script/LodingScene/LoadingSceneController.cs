@@ -3,18 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using System;
+
 
 public class LoadingSceneController : MonoBehaviour //비기동 호출방식;
 {
     static string nextScene;
-    public Texture[] LoadingImageTexture = new Texture[2];
+    public Sprite[] LoadingImageSprite;
     [SerializeField]
     Image progressBar;
     [SerializeField]
-    Texture Back_Image;
+    Image Back_Image;
 
-    
+    private int Rvalue;
     
     public static void LoadScene(string sceneName) // 호출 시 string로 다음 scene의 이름을 받아온다.
     { 
@@ -25,9 +25,14 @@ public class LoadingSceneController : MonoBehaviour //비기동 호출방식;
     private void Start()
     {
         StartCoroutine(LoadSceneProcess());
+        Back_Image = GameObject.Find("LoadingBackGround").GetComponent<Image>();
+        Rvalue = Random.Range(0, 2);
+        Debug.Log(Rvalue);
+        Back_Image.sprite = LoadingImageSprite[Rvalue];
+    }
 
-        //Back_Image = LoadingImageTexture[1];
-
+    private void Update()
+    {
     }
 
     IEnumerator LoadSceneProcess()
