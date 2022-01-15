@@ -20,10 +20,10 @@ public class HiddemCube : MonoBehaviour
     {
         Vector3 dis = playerTr.position - this.transform.position;
 
-        if(dis.magnitude <= 5)
+        if(dis.magnitude <= 3)
         {
             Cuanim.SetTrigger("IsHidden");
-            Destroy(gameObject,0.35f);
+            Destroy(gameObject,0.25f);
         }
         else { }
     }

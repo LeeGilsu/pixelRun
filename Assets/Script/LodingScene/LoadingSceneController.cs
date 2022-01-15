@@ -8,9 +8,13 @@ using System;
 public class LoadingSceneController : MonoBehaviour //비기동 호출방식;
 {
     static string nextScene;
-
+    public Texture[] LoadingImageTexture = new Texture[2];
     [SerializeField]
     Image progressBar;
+    [SerializeField]
+    Texture Back_Image;
+
+    
     
     public static void LoadScene(string sceneName) // 호출 시 string로 다음 scene의 이름을 받아온다.
     { 
@@ -21,6 +25,9 @@ public class LoadingSceneController : MonoBehaviour //비기동 호출방식;
     private void Start()
     {
         StartCoroutine(LoadSceneProcess());
+
+        //Back_Image = LoadingImageTexture[1];
+
     }
 
     IEnumerator LoadSceneProcess()
@@ -41,7 +48,7 @@ public class LoadingSceneController : MonoBehaviour //비기동 호출방식;
             {
                 timer += Time.unscaledDeltaTime;
                 Debug.Log(timer);
-                progressBar.fillAmount = Mathf.Lerp(0.1f, 1f, timer);
+                progressBar.fillAmount = Mathf.Lerp(0.1f, 1f, timer*0.8f);
                 if (progressBar.fillAmount >= 1f) 
                 {
                     op.allowSceneActivation = true; // fillamonut의 값을 최대치로 되면 allowSceneActivation = true로 이동 제한을 풀어준다.
