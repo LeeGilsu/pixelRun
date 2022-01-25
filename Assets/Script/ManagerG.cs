@@ -13,15 +13,22 @@ public class ManagerG : MonoBehaviour
     public Player player;
 
     private Scene scene;
-    public float playtime;
+    public float Max_Playtime;
+    public float Currnt_playtime; // 현재 진행중인 시간
+    public float Best_Playtime;   // 최고기록 시간.
+
     public TMPro.TMP_Text text;
     public TMPro.TMP_Text Ftext; // 종료 후 경과 시간 출력 텍스트.
+    public TMPro.TMP_Text BestTimer; // 최고 기록 저장텍스트
     public bool m_stop = false;
+
+    //클리어 박스 출력 시 점수 이미지 애니매이션 그룹
 
     private void Awake()
     {
-     //   _clearbox = GameObject.Find("ClearBox");//.GetComponent<Canvas>();
-    //    _clearbox.SetActive(false);
+        //   _clearbox = GameObject.Find("ClearBox");//.GetComponent<Canvas>();
+        //    _clearbox.SetActive(false);
+       // PlayerPrefs.DeleteKey("BestTime"); 
     }
     void Start()
     {
@@ -31,30 +38,44 @@ public class ManagerG : MonoBehaviour
         UI_Panel = GameObject.Find("GameOver");
         UI_Panel.SetActive(false);
         Ftext = _clearbox.GetComponentInChildren<TMPro.TMP_Text>(); // GetComponentInChildren은 하위 객채 Text 첫번째 오브젝트를 불러옴.
+        BestTimer = GameObject.Find("BestTime").GetComponent<TMP_Text>(); 
 
         scene = SceneManager.GetActiveScene();
         text = GetComponentInChildren<TMPro.TMP_Text>();
+        Max_Playtime = 60f; // 초기 시간 지정
+        Currnt_playtime = 0.000f;
 
-        playtime = 50f;
+        DeleyTime(m_stop);
 
-        DeleyTime(); 
+        BestClearTimeSet();
+    }
+
+    private void BestClearTimeSet()
+    {
+        Best_Playtime = PlayerPrefs.GetFloat("BestTime");
+
+        BestTimer.text = "BEST : " + Best_Playtime.ToString("F2");
+
+        if (Best_Playtime == 0)
+        {
+            BestTimer.text = "BEST : - - ";
+        }
+
     }
 
     // Update is called once per frame
     void Update()
     {
-         if (m_stop != true)
+        if (m_stop == false && player.current_State == false)
           {
-              playtime -= Time.deltaTime;
-              text.text = "TIME : " + (int)playtime;
-              if (playtime <= 0)
-              {
-                player.p_Point = 1;
-                UI_Panel.SetActive(true);
+              Currnt_playtime += Time.deltaTime;
+              text.text = "TIME : " + Currnt_playtime.ToString("F2");
+
+            if (Currnt_playtime >= Max_Playtime) // 최대시간을 넘겼을 시 중단.
+            {
                 m_stop = true;
-                DeleyTime();
             }
-          }
+     }
 
     }
     IEnumerator SystemPause()
@@ -70,23 +91,24 @@ public class ManagerG : MonoBehaviour
                 yield return new WaitForSeconds(2.0f);
                 UI_Panel.SetActive(true);
                 m_stop = true;
-                DeleyTime();
+                DeleyTime(false);
                 isDone = false;
             }
             yield return null;
         }
-        DeleyTime();
+        DeleyTime(m_stop);
     }
 
-    void DeleyTime()
+    void DeleyTime(bool v)
     {
-        if (m_stop)
+        switch (v)
         {
-            Time.timeScale = 0f;
-        }
-        else
-        {
-            Time.timeScale = 1.0f;
+            case false: //딜레이 없을시 정상구동
+                Time.timeScale = 1.0f;
+                break;
+            case true: // 딜레이가true면 정지
+                Time.timeScale = 0f; //정지->0 정상적인 시간흐름 -> 1
+                break;
         }
     }
 
@@ -97,26 +119,36 @@ public class ManagerG : MonoBehaviour
         player.p_Point = 0;
         m_stop = false;
        
-        DeleyTime();
+        DeleyTime(m_stop);
     }
 
     public void FinishST()
     {
+        SaveTimer();
+        player.current_State = true; // 스테이지 클리어 후 클레이어 이동 및 시간 정지.
+
         _clearbox.SetActive(true); //클리어 오브잭트 활성화.
-        m_stop = true; // 업데이트 타이머 정지.
-        StartCoroutine(deley(1.5f));
-      
-        Ftext.text = /*"Clear Time :"+*/text.text;
+        Ftext.text = "Clrar "+text.text; // 클리어 시간 표시.남은시간(최대시간 - 진행시간)
+        scorecalculate(); // 남은 시간에따른 _clearbox의 UI활성화.
+
         StopAllCoroutines();
-        StartCoroutine(deley(2f)); // 딜레이 후 움직임 정지.
-        // 딜레이를 안할 시 clearbox가 올라오기전에 멈춤으로인한 딜레이.
     }
 
-    IEnumerator deley(float del)
+    private void SaveTimer()
     {
-        yield return new WaitForSeconds(del);
-        DeleyTime(); // 게임 정지.
+        if (Currnt_playtime < Best_Playtime || Best_Playtime == 0)
+        {
+            BestTimer.text = "BEST : " + Currnt_playtime.ToString("F2"); // 베스트 타임 텍스트를 바뀐 최고기록으로 교체.
+
+            PlayerPrefs.SetFloat("BestTime", Currnt_playtime); //현재 클리어타임이 기존 Best_Playtime보다 빠르거나 기존 데이터가없으면 현재 클리어시간 저장.
+        }
     }
-    
-    //reantween 이용한 메시지박스 연출
+
+    void scorecalculate()
+    {
+        if      (Currnt_playtime <= 20) { _clearbox.GetComponent<ClearBox>().scoreImage(3); } //20초 안에 클리어 시 <별 3개>
+        else if (Currnt_playtime <= 30) { _clearbox.GetComponent<ClearBox>().scoreImage(2); } //30초 안에 클리어 시 <별 2개>
+        else                            { _clearbox.GetComponent<ClearBox>().scoreImage(1); } //그외 클리어 타임 기록 시 <별 1개>.
+
+    }
 }

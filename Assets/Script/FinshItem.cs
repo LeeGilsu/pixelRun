@@ -25,11 +25,22 @@ public class FinshItem : MonoBehaviour
         // Y축을 기준으로 코싸인 그래프를 따라서 0도에서360도 사이의 각도로 회전.
     }
 
-    private void OnTriggerEnter(Collider other)
+  /*  private void OnTriggerEnter(Collision other)
     {
         if (other.gameObject.tag == "Player")
         {
             Manager.GetComponent<ManagerG>().FinishST();
+            Destroy(this.gameObject);
+            //코인과 플레이어 콜라이더가 닿을 시 게임 매니저 호출하여 FinishST 함수 호출 
+        }
+    }*/
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "Player")
+        {
+            Manager.GetComponent<ManagerG>().FinishST();
+            Destroy(this.gameObject);
             //코인과 플레이어 콜라이더가 닿을 시 게임 매니저 호출하여 FinishST 함수 호출 
         }
     }

@@ -22,8 +22,7 @@ public class CubeDrop : MonoBehaviour
     {
         if (collision.gameObject.tag == "Player")
         {
-            Debug.Log("플레이어 발 닿았다");
-            Invoke("DropCube", 2f);
+           Invoke("DropCube", 1.2f);
         }
         if (collision.gameObject.tag == "EndGround")
         {

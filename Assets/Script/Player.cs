@@ -20,16 +20,20 @@ public class Player : MonoBehaviour
 
     Rigidbody rigid;
     Animator anim;
+
+    //클리어 시 캐릭터 중지를 위한 bool
+    public bool current_State;
     void Start()
     {
         rigid = GetComponent<Rigidbody>();
         anim = GetComponentInChildren<Animator>();
+        current_State = false; // false일때 정상작동.
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (p_Point == 0)
+        if (p_Point <= 0 && current_State ==false)
         {
             GetInput();
             PlayerMove();

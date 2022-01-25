@@ -36,9 +36,4 @@ public class MisailDrop : MonoBehaviour
         }
     }
 
-    void DropCube()
-    {
-
-    }
-
 }
