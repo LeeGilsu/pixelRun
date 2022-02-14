@@ -42,12 +42,18 @@ public class SphereRot : MonoBehaviour
         {
             RaycastHit hit;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            Physics.Raycast(ray, out hit, 1000);
-
-            if (hit.collider == round_1)
+            if(Physics.Raycast(ray, out hit, Mathf.Infinity))
             {
-                Debug.Log("터치");
+                Debug.Log(hit.collider.tag);
+                if (hit.collider.tag == "Round")
+                {
+                    Debug.Log("1라운드가 클릭됨.");
+                }
             }
+            //if (hit.collider == round_1)
+            //{
+            //    Debug.Log("터치");
+            //}
         }
     }
 
