@@ -17,6 +17,7 @@ public class SphereRot : MonoBehaviour
     private float temp = 0;
     float sd;
     bool Isdone;
+    public GameObject round_1;
     void Start()
     {
     }
@@ -36,24 +37,37 @@ public class SphereRot : MonoBehaviour
         {
             LoadingSceneController.LoadScene("MainStage");
         }
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            RaycastHit hit;
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Physics.Raycast(ray, out hit, 1000);
+
+            if (hit.collider == round_1)
+            {
+                Debug.Log("터치");
+            }
+        }
     }
 
     public void LeftRot()
     {
+        AudioManager.instance.PlaySFX("Tuch");
         StartCoroutine(moveRot(0));
         Debug.Log("left");
     }
 
     public void RightRot()
     {
+        AudioManager.instance.PlaySFX("Tuch");
         StartCoroutine(moveRot(1));
     }
 
     public void SceneTestbutton()
     {
-       // LoadingSceneController.Instance.LoadScene("MainStage");
+        LoadingSceneController.LoadScene("MainStage");
     }
-
 
     IEnumerator moveRot(float i)
     {

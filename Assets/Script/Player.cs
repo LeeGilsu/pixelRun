@@ -17,6 +17,7 @@ public class Player : MonoBehaviour
     public float m_JumpPow = 25.0f;
     public int p_Point = 0;
 
+    public GameObject joystick; //조이스틱 컴포넌트 가져오기위해 사용.
 
     Rigidbody rigid;
     Animator anim;
@@ -31,7 +32,7 @@ public class Player : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void Update() //키보드모드 
     {
         if (p_Point <= 0 && current_State ==false)
         {
@@ -40,14 +41,14 @@ public class Player : MonoBehaviour
             Jump();
         }
     }
-    void GetInput()
+    void GetInput() //키보드모드
     {
-        h_Axis = Input.GetAxisRaw("Horizontal");
+         h_Axis = Input.GetAxisRaw("Horizontal");
         v_Axis = Input.GetAxisRaw("Vertical");
         wDown = Input.GetButton("Walk");
         jDown = Input.GetButtonDown("Jump");
     }
-    void PlayerMove()
+    void PlayerMove() //키보드모드
     {
         moveVec = new Vector3(h_Axis, 0, v_Axis).normalized;
 
@@ -57,7 +58,7 @@ public class Player : MonoBehaviour
         // 삼항 연산자 wDown이 ? 트루면 0.3f /  false 면 1.0f의 속도.
         transform.LookAt(transform.position + moveVec); // Rotation
     }
-    void Jump()
+    void Jump() //키보드모드
     {
         if (jDown &&!IsJump)
         {
@@ -68,15 +69,17 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnCollisionEnter(Collision collision) //키보드모드
     {
+        
         if (collision.gameObject.tag == "Ground")
         {
             anim.SetBool("IsJump", false);
             m_JumpPow = 25.0f;
             IsJump = false;
-        }
 
+            joystick.GetComponent<JoyStick>().IsJump = false; //조이스틱조작을 위해 false값으로 변환
+        }
         if (collision.gameObject.tag == "EndGround" || collision.gameObject.tag == "Misail")
         {
             anim.SetTrigger("IsDie");
@@ -86,6 +89,8 @@ public class Player : MonoBehaviour
         {
             m_JumpPow = 50f;
             IsJump = false;
+
+            joystick.GetComponent<JoyStick>().IsJump = false;
         }
 
     }

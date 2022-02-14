@@ -11,15 +11,19 @@ public class ManagerG : MonoBehaviour
     public GameObject UI_Panel;
     public GameObject _clearbox;
     public Player player;
+    public JoyStick joystick;
 
     private Scene scene;
     public float Max_Playtime;
     public float Currnt_playtime; // 현재 진행중인 시간
     public float Best_Playtime;   // 최고기록 시간.
 
+    //[폰트]
     public TMPro.TMP_Text text;
     public TMPro.TMP_Text Ftext; // 종료 후 경과 시간 출력 텍스트.
     public TMPro.TMP_Text BestTimer; // 최고 기록 저장텍스트
+    
+    //[작동상태 확인]
     public bool m_stop = false;
 
     //클리어 박스 출력 시 점수 이미지 애니매이션 그룹
