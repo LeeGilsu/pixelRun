@@ -1041,6 +1041,9 @@ MonoBehaviour:
   System_message: {fileID: 5910916216426844338, guid: 5671b4f4314e52c4a8c53df1a7e7a651,
     type: 3}
   tr: {fileID: 0}
+  audio: {fileID: 0}
+  scene:
+    m_Handle: 0
 --- !u!4 &595906351
 Transform:
   m_ObjectHideFlags: 0

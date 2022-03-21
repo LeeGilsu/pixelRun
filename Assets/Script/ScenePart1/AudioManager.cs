@@ -20,10 +20,8 @@ public class AudioManager : MonoBehaviour
     [SerializeField] AudioSource[] sfxPlayer = null;
 
    public static float sfxVolume_value;
-
-    private void Start()
+    private void Awake()
     {
-     
         var obj = FindObjectsOfType<AudioManager>();
 
         if (obj.Length == 1)
@@ -36,6 +34,9 @@ public class AudioManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
+    private void Start()
+    {
+    }
     public void PlayBGM(string p_bgmName)
     {
         for (int i = 0; i < bgm.Length; i++)
@@ -44,7 +45,7 @@ public class AudioManager : MonoBehaviour
             {
                 bgmPlayer.clip = bgm[i].clip;
                 bgmPlayer.Play();
-                bgmPlayer.volume = PlayerPrefs.GetInt("BGM");
+                bgmPlayer.volume = PlayerPrefs.GetFloat("BGM");
                 bgmPlayer.loop = true; // BGM 반복재생.
             }
         }
