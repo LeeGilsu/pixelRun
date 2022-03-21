@@ -27,12 +27,14 @@ public class ManagerG : MonoBehaviour
     public bool m_stop = false;
 
     //클리어 박스 출력 시 점수 이미지 애니매이션 그룹
+    [SerializeField] AudioManager audio;
 
     private void Awake()
     {
         //   _clearbox = GameObject.Find("ClearBox");//.GetComponent<Canvas>();
         //    _clearbox.SetActive(false);
-       // PlayerPrefs.DeleteKey("BestTime"); 
+        // PlayerPrefs.DeleteKey("BestTime"); 
+        audio = GameObject.Find("AudioManager").GetComponent<AudioManager>();
     }
     void Start()
     {
@@ -48,6 +50,7 @@ public class ManagerG : MonoBehaviour
         text = GetComponentInChildren<TMPro.TMP_Text>();
         Max_Playtime = 60f; // 초기 시간 지정
         Currnt_playtime = 0.000f;
+        audio.PlayBGM("BGM02");
 
         DeleyTime(m_stop);
 

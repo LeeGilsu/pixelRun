@@ -23,8 +23,13 @@ public class HiddemCube : MonoBehaviour
         if(dis.magnitude <= 3)
         {
             Cuanim.SetTrigger("IsHidden");
-            Destroy(gameObject,0.25f);
+            
         }
         else { }
+    }
+
+    public void Destroy_Cube()
+    {
+        Destroy(gameObject);
     }
 }

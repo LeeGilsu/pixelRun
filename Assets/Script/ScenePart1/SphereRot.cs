@@ -18,8 +18,12 @@ public class SphereRot : MonoBehaviour
     float sd;
     bool Isdone;
     public GameObject round_1;
+    public bool MenuState;
+
+   // public GameObject Sys_Box;
     void Start()
     {
+        MenuState = true;
     }
 
     // Update is called once per frame
@@ -38,23 +42,28 @@ public class SphereRot : MonoBehaviour
             LoadingSceneController.LoadScene("MainStage");
         }
 
-        if (Input.GetMouseButtonDown(0))
+        if(MenuState == true) 
         {
-            RaycastHit hit;
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if(Physics.Raycast(ray, out hit, Mathf.Infinity))
+            if (Input.GetMouseButtonDown(0))
             {
-                Debug.Log(hit.collider.tag);
-                if (hit.collider.tag == "Round")
+                RaycastHit hit;
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                if (Physics.Raycast(ray, out hit, Mathf.Infinity))
                 {
-                    Debug.Log("1라운드가 클릭됨.");
+                    Debug.Log(hit.collider.tag);
+                    if (hit.collider.tag == "Round")
+                    {
+                        Debug.Log("1라운드가 클릭됨.");
+                        AudioManager.instance.StopBGM();
+                        LoadingSceneController.LoadScene("MainStage");
+                    }
                 }
             }
-            //if (hit.collider == round_1)
-            //{
-            //    Debug.Log("터치");
-            //}
         }
+        // 메시지박스가 출력 시 RaycastHit를 작동 중지시킴.
+        if (GameObject.Find("SystemMessage(Clone)") != null || GameObject.Find("setting_ButtonGroup") != null) { MenuState = false; } 
+        else if(GameObject.Find("SystemMessage(Clone)") == null && GameObject.Find("setting_ButtonGroup") == null) { MenuState = true; }
+        
     }
 
     public void LeftRot()

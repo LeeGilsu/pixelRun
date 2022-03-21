@@ -49,5 +49,10 @@ public class FinshItem : MonoBehaviour
     {
         this.transform.rotation = Quaternion.Euler(rotation);
     }
+    
+    public void Box_openEvent()
+    { 
+        
+    }
 
 }

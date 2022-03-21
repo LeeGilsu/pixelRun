@@ -14446,6 +14446,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2840943447645236782}
   - component: {fileID: -1507307958685205209}
+  - component: {fileID: 8183449211039473984}
   m_Layer: 0
   m_Name: MisailEff
   m_TagString: Untagged
@@ -14482,3 +14483,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 367894113107b5547a75d99580ec7eef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  BombEff: {fileID: 1150934714579380, guid: 779aa8c25fbd0e1488637639c9fff976, type: 3}
+--- !u!136 &8183449211039473984
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2839469376174463286}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.5
+  m_Height: 1
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}

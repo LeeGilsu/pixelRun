@@ -9,11 +9,14 @@ public class MisailMove : MonoBehaviour
     public GameObject firOb;
     public Vector3 effpos;
     public Vector3 CubeTr;
-  
+    AudioManager au;
+
     void Start()
     {
        this.transform.rotation = Quaternion.Euler(0,0,-90f);
         CubeTr = GetComponent<Transform>().position;
+        au = AudioManager.instance;
+        Destroy(gameObject, 1.5f);
     }
 
     // Update is called once per frame
@@ -27,8 +30,8 @@ public class MisailMove : MonoBehaviour
         if (collision.gameObject.tag == "Player" || collision.gameObject.tag == "Ground")
         {
             Destroy(gameObject);
+            au.PlaySFX("Bomb");
             Instantiate(firOb, effpos, Quaternion.identity);
-            
         }
     }
 

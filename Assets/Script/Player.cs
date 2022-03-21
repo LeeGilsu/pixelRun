@@ -21,7 +21,9 @@ public class Player : MonoBehaviour
 
     Rigidbody rigid;
     Animator anim;
-
+    AudioManager audioManager;
+    
+    public Vector3 forceDirection;
     //클리어 시 캐릭터 중지를 위한 bool
     public bool current_State;
     void Start()
@@ -29,21 +31,23 @@ public class Player : MonoBehaviour
         rigid = GetComponent<Rigidbody>();
         anim = GetComponentInChildren<Animator>();
         current_State = false; // false일때 정상작동.
+        audioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
     }
 
     // Update is called once per frame
     void Update() //키보드모드 
     {
-        if (p_Point <= 0 && current_State ==false)
+        if (p_Point <= 0 && current_State == false)
         {
             GetInput();
             PlayerMove();
             Jump();
         }
+        
     }
     void GetInput() //키보드모드
     {
-         h_Axis = Input.GetAxisRaw("Horizontal");
+        h_Axis = Input.GetAxisRaw("Horizontal");
         v_Axis = Input.GetAxisRaw("Vertical");
         wDown = Input.GetButton("Walk");
         jDown = Input.GetButtonDown("Jump");
@@ -62,13 +66,13 @@ public class Player : MonoBehaviour
     {
         if (jDown &&!IsJump)
         {
+            audioManager.PlaySFX("Jump"); //점프 사운드 출력
             rigid.AddForce(Vector3.up * m_JumpPow, ForceMode.Impulse); //ForceMode.Impulse = 즉발
             anim.SetBool("IsJump",true);
             anim.SetTrigger("DoJump");
             IsJump = true;
         }
     }
-
     private void OnCollisionEnter(Collision collision) //키보드모드
     {
         
@@ -87,11 +91,40 @@ public class Player : MonoBehaviour
         }
         if (collision.gameObject.tag == "JumpShot")
         {
-            m_JumpPow = 50f;
+            /*m_JumpPow = 40f;
             IsJump = false;
 
-            joystick.GetComponent<JoyStick>().IsJump = false;
+            joystick.GetComponent<JoyStick>().IsJump = false;*/
+            rigid.AddForce(new Vector3(0,40f,0), ForceMode.Impulse);
         }
+        if (collision.gameObject.tag == "ProPeller")
+        {
+            rigid.AddForce(new Vector3(Random.Range(-1,1), 1f, -0.7f) * 30f, ForceMode.Impulse);
+            // Rigibody Addforce를 이용해 콜라이더 충돌 시 뒤로 밀려남 효과 적용.
+        }
+        if (collision.gameObject.tag == "Push_Hammer")
+        {
+            rigid.AddForce(new Vector3(0, 1f, -60f), ForceMode.Impulse);
+            anim.SetTrigger("IsDie");
+            StartCoroutine(delayExit(1));
+        }
+    }
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.gameObject.tag == "exception")
+        {
+            IsJump = true; 
+            joystick.GetComponent<JoyStick>().IsJump = true;
+            rigid.freezeRotation = false;
+            current_State = true; // 작동중지 _ 
+            anim.SetTrigger("DoStop");
 
+        }
+    }
+
+    IEnumerator delayExit(float i)
+    {
+        yield return new WaitForSeconds(i);
+        MaxHP = 0;
     }
 }

@@ -6,9 +6,11 @@ public class TrapHummer : MonoBehaviour
 {
     public FirshHummer F_H;
     public static int AttackCount = 0;
+    AudioManager audio;
     // Start is called before the first frame update
     void Start()
     {
+        audio = AudioManager.instance;
         F_H = GameObject.Find("FinshHummer").GetComponent<FirshHummer>();
         AttackCount = 0;
     }
@@ -27,6 +29,7 @@ public class TrapHummer : MonoBehaviour
             {
                 AttackCount++;
                 F_H.HummAnimStart();
+                audio.PlaySFX("FlyHummer");
                 Time.timeScale = 0.5f;
             }
         }

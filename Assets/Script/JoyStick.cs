@@ -15,6 +15,8 @@ public class JoyStick : MonoBehaviour,IDragHandler, IPointerUpHandler, IPointerD
     private Animator anim;
     private Rigidbody rigi;
 
+    AudioManager audiomanager;
+
     public bool IsJump;
     float m_JumpPow;
     public void OnDrag(PointerEventData eventData)
@@ -60,6 +62,7 @@ public class JoyStick : MonoBehaviour,IDragHandler, IPointerUpHandler, IPointerD
         Player = GameObject.Find("Player").GetComponentInChildren<Transform>();
         anim = Player.GetComponentInChildren<Animator>();
         rigi = Player.GetComponent<Rigidbody>();
+        audiomanager = AudioManager.instance;
         moveSpeed = 15f;
     }
 
@@ -68,6 +71,7 @@ public class JoyStick : MonoBehaviour,IDragHandler, IPointerUpHandler, IPointerD
         Debug.Log("jumpClikc");
         if (!IsJump)
         {
+            audiomanager.PlaySFX("Jump"); //점프 사운드 출력.
             m_JumpPow = 25f;
             rigi.AddForce(Vector3.up * m_JumpPow, ForceMode.Impulse); //ForceMode.Impulse = 즉발
             anim.SetBool("IsJump", true);

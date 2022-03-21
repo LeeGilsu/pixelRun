@@ -6,10 +6,14 @@ public class Hummer : MonoBehaviour
 {
     public  GameObject burst;
     public Transform boomPos;
+    AudioManager sfxSound;
+
+    AudioSource audio;
     // Start is called before the first frame update
     void Start()
     {
-        
+        sfxSound = GameObject.Find("AudioManager").GetComponent<AudioManager>();
+        audio = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -20,6 +24,9 @@ public class Hummer : MonoBehaviour
 
     void boomBurst()
     {
+        //sfxSound.PlaySFX("Hummer");
+
+        audio.Play();
         Instantiate(burst, boomPos.transform.position, Quaternion.identity);
    
     }

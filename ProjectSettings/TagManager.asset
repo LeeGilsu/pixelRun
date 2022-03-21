@@ -9,6 +9,10 @@ TagManager:
   - Misail
   - JumpShot
   - Round
+  - upLeft
+  - ProPeller
+  - exception
+  - Push_Hammer
   layers:
   - Default
   - TransparentFX
